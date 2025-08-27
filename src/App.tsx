@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
 import IncomeForm from "./components/IncomeForm";
 import ExpensesTable from "./components/ExpensesTable";
@@ -12,6 +12,7 @@ import {
   deleteExpense as deleteExpenseAction,
   deleteIncome as deleteIncomeAction,
 } from "./store/budgetSlice";
+import { ChevronDown } from "lucide-react";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -19,12 +20,17 @@ function App() {
   const incomes = useAppSelector((s) => s.budget.incomes);
   const totalIncome = useAppSelector((s) => s.budget.totalIncome);
 
+  const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [showIncomeForm, setShowIncomeForm] = useState(false);
+
   const addExpense = (expenseData: Omit<Expense, "id">) => {
     dispatch(addExpenseAction(expenseData));
+    setShowExpenseForm(false);
   };
 
   const addIncome = (incomeData: Omit<Income, "id">) => {
     dispatch(addIncomeAction(incomeData));
+    setShowIncomeForm(false);
   };
 
   const deleteExpense = (id: number) => {
@@ -87,42 +93,10 @@ function App() {
               <li>
                 <a
                   href="#"
-                  className="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
+                  className="block py-2 px-3 text-white bg-orange-500 rounded-sm md:bg-transparent md:text-orange-500 md:p-0 dark:text-white md:dark:text-orange-500"
                   aria-current="page"
                 >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                  About
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                  Services
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                  Pricing
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                  Contact
+                  Inicio
                 </a>
               </li>
             </ul>
@@ -131,21 +105,86 @@ function App() {
       </nav>
 
       <main className="container mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 items-start">
           {/* Formulario de Gastos */}
-          <div className="gamer-border rounded-lg p-6 bg-gray-800">
-            <h2 className="text-2xl font-bold text-orange-500 mb-4">
-              Agregar Gasto Fijo
-            </h2>
-            <ExpenseForm onSubmit={addExpense} />
+          <div className="gamer-border rounded-lg p-0 bg-gray-800 self-start">
+            <button
+              type="button"
+              onClick={() => setShowExpenseForm((v) => !v)}
+              className="w-full flex items-center justify-between px-6 py-4"
+              aria-expanded={showExpenseForm}
+            >
+              <h2 className="text-2xl font-bold text-orange-500">
+                Agregar Gasto Fijo
+              </h2>
+              <ChevronDown
+                className={`transition-transform ${
+                  showExpenseForm ? "rotate-180" : "rotate-0"
+                }`}
+              />
+            </button>
+            {showExpenseForm && (
+              <div className="px-6 pb-6">
+                <ExpenseForm onSubmit={addExpense} />
+              </div>
+            )}
           </div>
 
           {/* Formulario de Ingresos */}
-          <div className="gamer-border rounded-lg p-6 bg-gray-800">
-            <h2 className="text-2xl font-bold text-purple-500 mb-4">
-              Agregar Ingreso
-            </h2>
-            <IncomeForm onSubmit={addIncome} />
+          <div className="gamer-border rounded-lg p-0 bg-gray-800 self-start">
+            <button
+              type="button"
+              onClick={() => setShowIncomeForm((v) => !v)}
+              className="w-full flex items-center justify-between px-6 py-4"
+              aria-expanded={showIncomeForm}
+            >
+              <h2 className="text-2xl font-bold text-purple-500">
+                Agregar Ingreso
+              </h2>
+              <ChevronDown
+                className={`transition-transform ${
+                  showIncomeForm ? "rotate-180" : "rotate-0"
+                }`}
+              />
+            </button>
+            {showIncomeForm && (
+              <div className="px-6 pb-6">
+                <IncomeForm onSubmit={addIncome} />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Resumen */}
+        <div className="mt-8 p-6 gamer-border rounded-lg bg-gray-800 mb-5">
+          <h2 className="text-2xl font-bold mb-4 text-center">
+            Resumen Financiero
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+            <div>
+              <p className="text-gray-400">Ingresos Totales</p>
+              <p className="text-2xl font-bold text-green-500">
+                ${totalIncome.toFixed(2)}
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-400">Gastos Totales</p>
+              <p className="text-2xl font-bold text-red-500">
+                ${totalExpenses.toFixed(2)}
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-400">Balance</p>
+              <p
+                className={`text-2xl font-bold ${
+                  totalIncome - totalExpenses >= 0
+                    ? "text-green-500"
+                    : "text-red-500"
+                }`}
+              >
+                ${(totalIncome - totalExpenses).toFixed(2)}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -193,39 +232,6 @@ function App() {
               Ingresos
             </h2>
             <IncomesTable incomes={incomes} onDelete={deleteIncome} />
-          </div>
-        </div>
-
-        {/* Resumen */}
-        <div className="mt-8 p-6 gamer-border rounded-lg bg-gray-800">
-          <h2 className="text-2xl font-bold mb-4 text-center">
-            Resumen Financiero
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-gray-400">Ingresos Totales</p>
-              <p className="text-2xl font-bold text-green-500">
-                ${totalIncome.toFixed(2)}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-400">Gastos Totales</p>
-              <p className="text-2xl font-bold text-red-500">
-                ${totalExpenses.toFixed(2)}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-400">Balance</p>
-              <p
-                className={`text-2xl font-bold ${
-                  totalIncome - totalExpenses >= 0
-                    ? "text-green-500"
-                    : "text-red-500"
-                }`}
-              >
-                ${(totalIncome - totalExpenses).toFixed(2)}
-              </p>
-            </div>
           </div>
         </div>
       </main>
