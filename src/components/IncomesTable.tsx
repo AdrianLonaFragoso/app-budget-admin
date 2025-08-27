@@ -2,9 +2,8 @@ import { Trash2 } from "lucide-react";
 import { IncomesTableProps } from "../types";
 
 const IncomesTable = ({ incomes, onDelete }: IncomesTableProps) => {
-  const regularIncomes = incomes.filter((income) => income.type !== "total");
-  const totalIncome =
-    incomes.find((income) => income.type === "total")?.amount || 0;
+  const extraIncomes = incomes.filter((income) => income.type === "extra");
+  const totalIncome = incomes.reduce((sum, income) => sum + income.amount, 0);
 
   return (
     <div className="overflow-x-auto">
@@ -12,9 +11,9 @@ const IncomesTable = ({ incomes, onDelete }: IncomesTableProps) => {
         Ingreso Total: ${totalIncome.toFixed(2)}
       </h3>
 
-      {regularIncomes.length === 0 ? (
+      {extraIncomes.length === 0 ? (
         <p className="text-gray-400 text-center py-4">
-          No hay ingresos regulares registrados
+          No hay ingresos extra registrados
         </p>
       ) : (
         <table className="w-full">
@@ -26,7 +25,7 @@ const IncomesTable = ({ incomes, onDelete }: IncomesTableProps) => {
             </tr>
           </thead>
           <tbody>
-            {regularIncomes.map((income) => (
+            {extraIncomes.map((income) => (
               <tr
                 key={income.id}
                 className="border-b border-gray-700 hover:bg-gray-750"

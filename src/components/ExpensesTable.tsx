@@ -12,12 +12,18 @@ const ExpensesTable = ({ expenses, onDelete }: ExpensesTableProps) => {
     );
   }
 
+  const formatVigencia = (vigencia?: string | null, indefinido?: boolean) => {
+    if (indefinido || !vigencia) return "-";
+    return vigencia; // keep as YYYY-MM-DD; adjust formatting if needed
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
           <tr className="border-b border-gray-700">
             <th className="py-2 px-3 text-left">Nombre</th>
+            <th className="py-2 px-3 text-left">Vigencia</th>
             <th className="py-2 px-3 text-right">Monto</th>
             <th className="py-2 px-3 text-right">Acciones</th>
           </tr>
@@ -29,6 +35,9 @@ const ExpensesTable = ({ expenses, onDelete }: ExpensesTableProps) => {
               className="border-b border-gray-700 hover:bg-gray-750"
             >
               <td className="py-2 px-3">{expense.name}</td>
+              <td className="py-2 px-3 text-left">
+                {formatVigencia(expense.vigencia, expense.indefinido)}
+              </td>
               <td className="py-2 px-3 text-right">
                 ${expense.amount.toFixed(2)}
               </td>
@@ -46,6 +55,7 @@ const ExpensesTable = ({ expenses, onDelete }: ExpensesTableProps) => {
         <tfoot>
           <tr className="font-bold">
             <td className="py-2 px-3">Total</td>
+            <td className="py-2 px-3"></td>
             <td className="py-2 px-3 text-right">${total.toFixed(2)}</td>
             <td className="py-2 px-3"></td>
           </tr>

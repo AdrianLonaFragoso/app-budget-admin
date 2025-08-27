@@ -5,7 +5,6 @@ import { IncomeFormProps } from "../types";
 const IncomeForm = ({ onSubmit }: IncomeFormProps) => {
   const [name, setName] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
-  const [type, setType] = useState<"regular" | "total">("regular");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,17 +13,11 @@ const IncomeForm = ({ onSubmit }: IncomeFormProps) => {
     onSubmit({
       name,
       amount: parseFloat(amount),
-      type,
+      type: "extra",
     });
 
-    if (type === "total") {
-      setName("");
-      setAmount("");
-    } else {
-      setName("");
-      setAmount("");
-      setType("regular");
-    }
+    setName("");
+    setAmount("");
   };
 
   return (
@@ -51,19 +44,6 @@ const IncomeForm = ({ onSubmit }: IncomeFormProps) => {
           placeholder="0.00"
           step="0.01"
         />
-      </div>
-      <div>
-        <label className="block text-sm font-medium mb-1">
-          Tipo de Ingreso
-        </label>
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value as "regular" | "total")}
-          className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
-        >
-          <option value="regular">Ingreso Regular</option>
-          <option value="total">Ingreso Total (Sueldo)</option>
-        </select>
       </div>
       <button
         type="submit"

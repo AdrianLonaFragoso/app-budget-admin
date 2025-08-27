@@ -2,13 +2,15 @@ export interface Expense {
   id: number;
   name: string;
   amount: number;
+  vigencia?: string | null;
+  indefinido?: boolean;
 }
 
 export interface Income {
   id: number;
   name: string;
   amount: number;
-  type: "regular" | "total";
+  type: "extra" | "total";
 }
 
 export interface ProgressBarProps {
