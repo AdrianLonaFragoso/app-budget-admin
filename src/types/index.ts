@@ -30,9 +30,11 @@ export interface IncomeFormProps {
 export interface ExpensesTableProps {
   expenses: Expense[];
   onDelete: (id: number) => void;
+  onUpdate: (expense: Expense) => void;
 }
 
 export interface IncomesTableProps {
   incomes: Income[];
   onDelete: (id: number) => void;
+  onUpdate: (income: Income) => void;
 }

@@ -11,6 +11,8 @@ import {
   addIncome as addIncomeAction,
   deleteExpense as deleteExpenseAction,
   deleteIncome as deleteIncomeAction,
+  updateExpense as updateExpenseAction,
+  updateIncome as updateIncomeAction,
 } from "./store/budgetSlice";
 import { ChevronDown } from "lucide-react";
 
@@ -39,6 +41,14 @@ function App() {
 
   const deleteIncome = (id: number) => {
     dispatch(deleteIncomeAction(id));
+  };
+
+  const editExpense = (expense: Expense) => {
+    dispatch(updateExpenseAction(expense));
+  };
+
+  const editIncome = (income: Income) => {
+    dispatch(updateIncomeAction(income));
   };
 
   const totalExpenses = useMemo(
@@ -223,7 +233,11 @@ function App() {
             <h2 className="text-2xl font-bold text-orange-500 mb-4">
               Gastos Fijos
             </h2>
-            <ExpensesTable expenses={expenses} onDelete={deleteExpense} />
+            <ExpensesTable
+              expenses={expenses}
+              onDelete={deleteExpense}
+              onUpdate={editExpense}
+            />
           </div>
 
           {/* Tabla de Ingresos */}
@@ -231,7 +245,11 @@ function App() {
             <h2 className="text-2xl font-bold text-purple-500 mb-4">
               Ingresos
             </h2>
-            <IncomesTable incomes={incomes} onDelete={deleteIncome} />
+            <IncomesTable
+              incomes={incomes}
+              onDelete={deleteIncome}
+              onUpdate={editIncome}
+            />
           </div>
         </div>
       </main>
